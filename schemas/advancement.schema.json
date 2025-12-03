@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Advancement",
+  "description": "Complete validation schema for Minecraft 1.21.10 advancements with telemetry support",
+  "type": "object",
+  "required": ["criteria"],
+  "properties": {
+    "display": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "oneOf": [
+            { "$ref": "#/$defs/item_ref" },
+            { "$ref": "#/$defs/nbt_item" }
+          ]
+        },
+        "title": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/localization_ref" }
+          ]
+        },
+        "description": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/localization_ref" }
+          ]
+        },
+        "frame": {
+          "enum": ["task", "goal", "challenge"]
+        },
+        "show_toast": { "type": "boolean" },
+        "announce_to_chat": { "type": "boolean" },
+        "hidden": { "type": "boolean" },
+        "background": {
+          "type": "string",
+          "pattern": "^minecraft:textures/(block|gui)/[a-z0-9_/]+\\.png$"
+        },
+        "chat_background_color": { "type": "integer" }
+      },
+      "required": ["icon", "title", "description"],
+      "additionalProperties": false
+    },
+    "parent": {
+      "type": "string",
+      "pattern": "^[a-z0-9_./:]+$"
+    },
+    "criteria": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z0-9_]{1,32}$": {
+          "type": "object",
+          "required": ["trigger"],
+          "properties": {
+            "trigger": {
+              "type": "string",
+              "pattern": "^(minecraft:(player_hurt_entity|player_killed_entity|using_item|inventory_changed|recipe_unlocked|...))$"
+            },
+            "conditions": {
+              "type": "object",
+              "unevaluatedProperties": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]{1,32}$"
+        }
+      }
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "function": { "type": "string" },
+        "experience": { "type": "integer", "minimum": 0 },
+        "loot": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_./:]+$"
+          },
+          "uniqueItems": true
+        },
+        "recipes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_./:]+$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "strategy": {
+      "enum": ["OR", "AND"]
+    },
+    "sends_telemetry_event": { "type": "boolean" },
+    "by_proximity": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "item_ref": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "type": "string",
+          "pattern": "^(minecraft|[a-z0-9_.-]+):[a-z0-9_/.-]+$"
+        },
+        "nbt": { "type": "string" }
+      },
+      "required": ["item"]
+    },
+    "nbt_item": {
+      "type": "string",
+      "pattern": "\\{[\\s\\S]*\\}"
+    },
+    "localization_ref": {
+      "type": "object",
+      "properties": {
+        "translate": {
+          "type": "string",
+          "pattern": "^[a-z0-9_./:]+$"
+        },
+        "with": {
+          "type": "array",
+          "items": { "type": ["string", "object"] }
+        },
+        "fallback": { "type": "string" }
+      },
+      "required": ["translate"]
+    }
+  },
+  "additionalProperties": false
+}
