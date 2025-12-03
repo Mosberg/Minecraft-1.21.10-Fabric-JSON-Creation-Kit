@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎮 Minecraft 1.21.10 Fabric JSON Creation Kit</title>
+    <script src="https://cdn.jsdelivr.net/npm/ajv@8.12.0/dist/ajv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.44.0/min/vs/loader.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+      <!-- Header Toolbar -->
+      <header class="toolbar">
+        <div class="toolbar-left">
+          <h1>🎮 Minecraft 1.21.10 Fabric JSON Creation Kit</h1>
+        </div>
+        <div class="toolbar-center">
+          <button id="newJsonBtn" class="btn-primary" title="Ctrl+N">
+            📄 New JSON
+          </button>
+          <select id="schemaSelect" class="schema-select">
+            <option value="">Select Schema...</option>
+          </select>
+          <button id="batchBtn" class="btn-secondary" title="Ctrl+Shift+B">
+            ⚡ Batch Generate
+          </button>
+        </div>
+        <div class="toolbar-right">
+          <button id="settingsBtn" class="btn-icon">⚙️</button>
+          <span id="statusLabel" class="status-label">Ready</span>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="welcome-screen active">
+          <div class="welcome-content">
+            <h2>Professional JSON Schema Validation & Generation</h2>
+            <div class="quick-actions">
+              <button id="quickItemBtn" class="quick-btn">🎒 Quick Item</button>
+              <button id="quickBlockBtn" class="quick-btn">
+                🧱 Quick Block
+              </button>
+              <button id="quickRecipeBtn" class="quick-btn">
+                ⚒️ Quick Recipe
+              </button>
+            </div>
+            <div class="features-grid">
+              <div class="feature-card">
+                <h3>✅ Live Validation</h3>
+                <p>Real-time schema validation with detailed errors</p>
+              </div>
+              <div class="feature-card">
+                <h3>⚡ Batch Generation</h3>
+                <p>Generate 1-10,000 JSON files instantly</p>
+              </div>
+              <div class="feature-card">
+                <h3>📋 Templates</h3>
+                <p>Pre-built templates with variable substitution</p>
+              </div>
+              <div class="feature-card">
+                <h3>🎨 Monaco Editor</h3>
+                <p>Professional code editing experience</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editor Tabs -->
+        <div
+          id="editorContainer"
+          class="editor-container"
+          style="display: none"
+        >
+          <div class="tab-header">
+            <div id="tabList" class="tab-list"></div>
+            <button id="closeTabBtn" class="close-tab-btn" title="Close Tab">
+              ×
+            </button>
+          </div>
+          <div id="editorArea" class="editor-area"></div>
+        </div>
+      </main>
+
+      <!-- Schema Selection Modal -->
+      <div id="schemaModal" class="modal">
+        <div class="modal-content">
+          <h3>📄 Create New JSON Document</h3>
+          <div id="schemaCategories" class="schema-categories"></div>
+          <div class="modal-actions">
+            <button id="createJsonBtn" class="btn-primary" disabled>
+              Create
+            </button>
+            <button id="cancelSchemaBtn" class="btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch Generation Modal -->
+      <div id="batchModal" class="modal">
+        <div class="modal-content">
+          <h3>⚡ Batch JSON Generator</h3>
+          <div class="form-group">
+            <label>Template:</label>
+            <select id="batchTemplate">
+              <option value="basic_item">Basic Item</option>
+              <option value="cube_block">Cube Block</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Count:</label>
+            <input
+              type="number"
+              id="batchCount"
+              value="10"
+              min="1"
+              max="10000"
+            />
+          </div>
+          <div class="form-group">
+            <label>Output Directory:</label>
+            <input type="text" id="batchOutput" value="./output" readonly />
+            <button id="browseOutput">📁 Browse</button>
+          </div>
+          <button id="generateBatchBtn" class="btn-primary">
+            Generate Batch
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings Modal -->
+      <div id="settingsModal" class="modal">
+        <div class="modal-content">
+          <h3>⚙️ Settings</h3>
+          <div class="form-group">
+            <label>Schemas Directory:</label>
+            <input type="text" id="schemasDir" value="/schemas" />
+          </div>
+          <div class="form-group">
+            <label>Templates Directory:</label>
+            <input type="text" id="templatesDir" value="/templates" />
+          </div>
+          <button id="saveSettingsBtn" class="btn-primary">
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
