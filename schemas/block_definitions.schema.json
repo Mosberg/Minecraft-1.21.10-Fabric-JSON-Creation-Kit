@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Block JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric block definitions",
+  "type": "object",
+  "required": ["format_version"],
+  "properties": {
+    "format_version": {
+      "const": "1.21.10"
+    },
+    "minecraft:geometry": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^geometry\\.[a-z0-9_]+$"
+      }
+    },
+    "minecraft:material_instances": {
+      "$ref": "#/$defs/material_instances"
+    },
+    "minecraft:light_dampening": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "minecraft:light_emission": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "minecraft:geometry": {
+      "type": "string",
+      "pattern": "^geometry\\.[a-z0-9_]+$"
+    },
+    "minecraft:render_controllers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^controller\\.render\\.[a-z0-9_]+$"
+      }
+    },
+    "minecraft:client_entity_events": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "run_command": {
+              "type": "object",
+              "properties": {
+                "command": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+:blocks/[a-z0-9_/.-]+$"
+        },
+        "menu_category": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "enum": ["construction", "nature", "equipment", "items"]
+            },
+            "group": { "type": "string" }
+          }
+        }
+      },
+      "required": ["identifier"]
+    }
+  },
+  "$defs": {
+    "material_instances": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "texture": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.-]+:blocks/[a-z0-9_/.-]+$"
+            },
+            "render_method": {
+              "enum": ["opaque", "blend", "alpha_test"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

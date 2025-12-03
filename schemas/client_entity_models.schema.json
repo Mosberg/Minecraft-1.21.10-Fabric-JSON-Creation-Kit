@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Client Entity JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric client entity models",
+  "type": "object",
+  "required": ["format_version", "minecraft:client_entity"],
+  "properties": {
+    "format_version": {
+      "const": "1.21.10"
+    },
+    "minecraft:client_entity": {
+      "type": "object",
+      "required": ["description"],
+      "properties": {
+        "description": {
+          "type": "object",
+          "required": ["identifier"],
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.-]+:entity/[a-z0-9_/.-]+$"
+            },
+            "materials": {
+              "type": { "$ref": "#/$defs/material_array" }
+            },
+            "textures": {
+              "type": { "$ref": "#/$defs/texture_array" }
+            },
+            "geometry": {
+              "type": { "$ref": "#/$defs/geometry_array" }
+            },
+            "animations": {
+              "type": { "$ref": "#/$defs/animation_array" }
+            },
+            "scripts": {
+              "type": { "$ref": "#/$defs/entity_scripts" }
+            },
+            "render_controllers": {
+              "type": { "$ref": "#/$defs/render_controllers" }
+            },
+            "spawn_egg": {
+              "type": "object",
+              "properties": {
+                "base_color": { "$ref": "#/$defs/color_rgb" },
+                "overlay_color": { "$ref": "#/$defs/color_rgb" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "material_array": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "json": { "type": "string" },
+            "texture": { "type": "string" },
+            "render_method": {
+              "enum": ["opaque", "blend", "alpha_test", "double_sided"]
+            }
+          }
+        }
+      }
+    },
+    "texture_array": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+\\.(?:png|jpg)$"
+        }
+      }
+    },
+    "geometry_array": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "string",
+          "pattern": "^geometry\\.[a-z0-9_]+$"
+        }
+      }
+    },
+    "animation_array": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "loop": { "type": "boolean" },
+            "animation_length": { "type": "number" },
+            "bones": { "type": "object" }
+          }
+        }
+      }
+    },
+    "entity_scripts": {
+      "type": "object",
+      "properties": {
+        "animate": {
+          "type": ["string", "array"],
+          "items": { "type": "string" }
+        },
+        "scale": { "$ref": "#/$defs/vector3" },
+        "particle": { "type": "string" }
+      }
+    },
+    "render_controllers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^controller\\.render\\.[a-z0-9_]+$"
+      }
+    },
+    "color_rgb": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0, "maximum": 1 },
+      "minItems": 3,
+      "maxItems": 4
+    },
+    "vector3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    }
+  },
+  "additionalProperties": false
+}

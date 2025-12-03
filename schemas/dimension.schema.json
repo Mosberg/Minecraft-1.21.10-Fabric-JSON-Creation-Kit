@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Dimension JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric dimension definitions",
+  "type": "object",
+  "required": ["type", "generator", "coordinate_scale"],
+  "properties": {
+    "type": {
+      "enum": [
+        "minecraft:overworld",
+        "minecraft:the_nether",
+        "minecraft:the_end"
+      ]
+    },
+    "generator": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["minecraft:noise", "minecraft:flat"]
+        },
+        "settings": { "type": "string" },
+        "biome_source": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "minecraft:multi",
+                "minecraft:fixed",
+                "minecraft:checkerboard"
+              ]
+            },
+            "preset": { "type": "string" },
+            "biomes": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "seed": { "type": "integer" }
+      }
+    },
+    "coordinate_scale": { "type": "number" },
+    "monster_spawn_light_level": {
+      "type": { "enum": ["minecraft:anything", "minecraft:surface"] }
+    },
+    "monster_spawn_block_light_limit": { "type": "integer" },
+    "fixed_time": { "type": "integer" },
+    "ultrawarm": { "type": "boolean" },
+    "has_raids": { "type": "boolean" },
+    "has_wildfire": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}

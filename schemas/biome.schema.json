@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Biome JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric biome definitions",
+  "type": "object",
+  "required": ["temperature", "downfall", "effects", "carvers", "features"],
+  "properties": {
+    "temperature": { "type": "number", "minimum": -1, "maximum": 2 },
+    "downfall": { "type": "number", "minimum": 0, "maximum": 2 },
+    "has_precipitation": { "type": "boolean" },
+    "temperature_modifier": {
+      "enum": ["none", "frozen"]
+    },
+    "effects": {
+      "type": "object",
+      "properties": {
+        "sky_color": { "type": "integer" },
+        "water_color": { "type": "integer" },
+        "water_fog_color": { "type": "integer" },
+        "fog_color": { "type": "integer" },
+        "music": {
+          "type": "object",
+          "properties": {
+            "sound": { "type": "string" },
+            "min_delay": { "type": "integer" },
+            "max_delay": { "type": "integer" },
+            "replace_current_music": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "carvers": {
+      "type": "object",
+      "properties": {
+        "air": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "minItems": 9
+    },
+    "spawners": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "blocks_blacklist": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "spawn_costs": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_.-]+:[a-z0-9_/.-]+$": {
+          "type": "object",
+          "properties": {
+            "energy_budget": { "type": "number" },
+            "charge": { "type": "number" }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

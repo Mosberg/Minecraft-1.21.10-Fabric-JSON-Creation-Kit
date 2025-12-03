@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Recipe (Shaped)",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric shaped recipes",
+  "type": "object",
+  "required": ["type", "pattern", "key", "result"],
+  "properties": {
+    "type": {
+      "const": "minecraft:crafting_shaped"
+    },
+    "pattern": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 3
+      },
+      "minItems": 1,
+      "maxItems": 3
+    },
+    "key": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z]$": {
+          "oneOf": [
+            { "$ref": "#/$defs/item_ref" },
+            { "$ref": "#/$defs/tag_ref" }
+          ]
+        }
+      },
+      "minProperties": 1
+    },
+    "result": {
+      "oneOf": [
+        { "$ref": "#/$defs/item_ref" },
+        {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64
+            }
+          }
+        }
+      ]
+    },
+    "group": { "type": "string" },
+    "priority": { "type": "integer" },
+    "show_notification": { "type": "boolean" }
+  },
+  "$defs": {
+    "item_ref": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+    },
+    "tag_ref": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+        }
+      },
+      "required": ["tag"]
+    }
+  },
+  "additionalProperties": false
+}

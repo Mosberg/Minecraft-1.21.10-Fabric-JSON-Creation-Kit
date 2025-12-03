@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Data Pack Format",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric data pack structure",
+  "type": "object",
+  "properties": {
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+$"
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "block_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_/.-]+\\.json$"
+          }
+        },
+        "item_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_/.-]+\\.json$"
+          }
+        },
+        "functions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_/.-]+\\.mcfunction$"
+          }
+        },
+        "loot_tables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:blocks?|entities?|chests?|gameplay|fishing)/[a-z0-9_/.-]+\\.json$"
+          }
+        }
+      }
+    }
+  },
+  "required": ["namespace", "files"],
+  "additionalProperties": false
+}

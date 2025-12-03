@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Item JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric item definitions",
+  "type": "object",
+  "required": ["format_version", "minecraft:item"],
+  "properties": {
+    "format_version": {
+      "const": "1.21.10"
+    },
+    "minecraft:item": {
+      "type": "object",
+      "required": ["description"],
+      "properties": {
+        "description": {
+          "type": "object",
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.-]+:items/[a-z0-9_/.-]+$"
+            },
+            "menu_category": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "enum": ["construction", "nature", "equipment", "items"]
+                },
+                "group": { "type": "string" }
+              }
+            }
+          },
+          "required": ["identifier"]
+        },
+        "components": {
+          "$ref": "#/$defs/item_components"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "item_components": {
+      "type": "object",
+      "patternProperties": {
+        "^minecraft:(hand_equipped|creative_category|icon|max_stack_size|stacked_by_data|allow_offhand|foil)$": {
+          "type": "boolean"
+        },
+        "^minecraft:max_damage$": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "^minecraft:display_name$": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" }
+          }
+        },
+        "^minecraft:icon$": {
+          "type": "object",
+          "properties": {
+            "texture": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.-]+:item/[a-z0-9_/.-]+$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

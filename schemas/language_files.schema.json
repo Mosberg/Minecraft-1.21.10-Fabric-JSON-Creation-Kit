@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Language (en_us)",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric language files",
+  "type": "object",
+  "patternProperties": {
+    "^(block|item|advancements?|commands?|actionbar_options?|death.?|gameMode|inventory|itemGroup|jei?|key|language|multiplayer|mount|multiplayer|namespace|pack|stat|subtitles?|translation|trim_pattern|trim_material)$": {
+      "type": "string"
+    },
+    "^(?:[a-z0-9_.-]+:)?(?:block|item)s/[a-z0-9_/.-]+$": {
+      "type": "string"
+    },
+    "^(?:[a-z0-9_.-]+\\.)?(?:block|item)_[a-z0-9_/.-]+$": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "minProperties": 1
+}

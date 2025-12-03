@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Block Loot Table",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric block loot tables",
+  "type": "object",
+  "required": ["type", "pools"],
+  "properties": {
+    "type": {
+      "const": "minecraft:block"
+    },
+    "pools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/../../../../previous/loot_table.schema.json#$defs/pool"
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/../../../../previous/loot_table.schema.json#$defs/loot_function"
+      }
+    }
+  },
+  "additionalProperties": false
+}

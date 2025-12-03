@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Loot Table",
+  "description": "Complete validation schema for Minecraft 1.21.10 loot tables with full function support",
+  "type": "object",
+  "required": ["pools"],
+  "properties": {
+    "type": {
+      "enum": [
+        "minecraft:block",
+        "minecraft:entity",
+        "minecraft:chest",
+        "minecraft:fishing",
+        "minecraft:gift",
+        "minecraft:advancement_reward",
+        "minecraft:generic",
+        "minecraft:archaeology"
+      ]
+    },
+    "pools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pool"
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/loot_function"
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/loot_condition"
+      }
+    }
+  },
+  "$defs": {
+    "int_range": {
+      "oneOf": [
+        { "type": "integer", "minimum": 0 },
+        {
+          "type": "object",
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "integer", "minimum": 0 },
+            "max": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "pool": {
+      "type": "object",
+      "required": ["rolls", "entries"],
+      "properties": {
+        "rolls": { "$ref": "#/$defs/int_range" },
+        "bonus_rolls": { "$ref": "#/$defs/int_range" },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/entry"
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/loot_condition"
+          }
+        },
+        "functions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/loot_function"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "entry": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": [
+            "minecraft:item",
+            "minecraft:loot_table",
+            "minecraft:group",
+            "minecraft:alternatives",
+            "minecraft:sequence",
+            "minecraft:dynamic",
+            "minecraft:empty",
+            "minecraft:tag"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^(minecraft|[a-z0-9_.-]+):[a-z0-9_/.-]+$"
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entry" }
+        },
+        "weight": { "type": "integer", "minimum": 1 },
+        "quality": { "type": "integer", "minimum": -10, "maximum": 10 },
+        "limit": { "type": "integer", "minimum": 0 },
+        "functions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/loot_function"
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/loot_condition"
+          }
+        },
+        "expand": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "loot_function": {
+      "type": "object",
+      "required": ["function"],
+      "properties": {
+        "function": {
+          "enum": [
+            "minecraft:set_count",
+            "minecraft:set_damage",
+            "minecraft:explosion_decay",
+            "minecraft:set_name",
+            "minecraft:enchant_randomly",
+            "minecraft:enchant_with_levels",
+            "minecraft:set_nbt",
+            "minecraft:apply_bonus",
+            "minecraft:copy_nbt",
+            "minecraft:set_attributes",
+            "minecraft:fill_player_head",
+            "minecraft:set_banner_pattern",
+            "minecraft:set_book_contents",
+            "minecraft:set_container",
+            "minecraft:set_container_loot",
+            "minecraft:set_fireworks",
+            "minecraft:set_potion",
+            "minecraft:set_stew_effect",
+            "minecraft:limit_count",
+            "minecraft:set_enchantments",
+            "minecraft:set_flag",
+            "minecraft:set_lore",
+            "minecraft:add_block_break_info"
+          ]
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/loot_condition"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "loot_condition": {
+      "type": "object",
+      "required": ["condition"],
+      "properties": {
+        "condition": {
+          "enum": [
+            "minecraft:survives_explosion",
+            "minecraft:random_chance",
+            "minecraft:random_chance_with_looting",
+            "minecraft:match_tool",
+            "minecraft:damage_source_properties",
+            "minecraft:location_check",
+            "minecraft:time_check",
+            "minecraft:weather_check",
+            "minecraft:block_state_property",
+            "minecraft:entity_scores",
+            "minecraft:killed_by_player",
+            "minecraft:entity_properties",
+            "minecraft:alternative",
+            "minecraft:inverted",
+            "minecraft:value_check"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

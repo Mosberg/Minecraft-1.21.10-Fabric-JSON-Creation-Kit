@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Pack.mcmeta",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric pack.mcmeta",
+  "type": "object",
+  "patternProperties": {
+    "^(pack|language)$": {
+      "type": "object",
+      "properties": {
+        "pack_format": {
+          "type": "integer",
+          "enum": [48]
+        },
+        "description": { "type": "string" },
+        "supported_formats": {
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      },
+      "required": ["pack_format"]
+    }
+  },
+  "additionalProperties": false,
+  "minProperties": 1
+}

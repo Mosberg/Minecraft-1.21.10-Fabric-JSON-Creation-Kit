@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Item Model",
+  "description": "Robust validation schema for Minecraft 1.21.10 item models with override support",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/parented_item" },
+    { "$ref": "#/$defs/custom_item" }
+  ],
+  "$defs": {
+    "item_texture": {
+      "type": "string",
+      "pattern": "^(minecraft|[a-z0-9_.-]+):item/[a-z0-9_./-]+$"
+    },
+    "predicate_key": {
+      "enum": ["angle", "damage", "damaged", "custom_model_data"]
+    },
+    "parented_item": {
+      "type": "object",
+      "required": ["parent"],
+      "properties": {
+        "parent": {
+          "type": "string",
+          "pattern": "^(minecraft|[a-z0-9_.-]+):item/(generated|handheld|trident|crossbow|bow|fishing_rod|shield|map|compass|banner|firework)"
+        },
+        "textures": {
+          "type": "object",
+          "patternProperties": {
+            "^layer(\\d+)$": {
+              "$ref": "#/$defs/item_texture"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        },
+        "display": { "$ref": "#/$defs/display" }
+      },
+      "additionalProperties": false
+    },
+    "custom_item": {
+      "type": "object",
+      "properties": {
+        "textures": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9_]+$": { "$ref": "#/$defs/item_texture" }
+          },
+          "additionalProperties": false
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/../../../../block_model.schema.json#$defs/custom_model/properties/elements/items"
+          }
+        },
+        "overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["predicate", "model"],
+            "properties": {
+              "predicate": {
+                "type": "object",
+                "patternProperties": {
+                  "^(angle|damage|damaged|custom_model_data)$": {
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMaximum": 1
+                  }
+                },
+                "minProperties": 1,
+                "additionalProperties": false
+              },
+              "model": {
+                "type": "string",
+                "pattern": "^(minecraft|[a-z0-9_.-]+):item/[a-z0-9_./-]+$"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "display": { "$ref": "#/$defs/display" },
+        "gui_light": {
+          "enum": ["minecraft:inventory", "minecraft:gui"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "patternProperties": {
+        "^(gui|ground|fixed|thirdperson_(lefthand|righthand)|firstperson_(lefthand|righthand)|head)$": {
+          "type": "object",
+          "properties": {
+            "rotation": {
+              "type": "array",
+              "items": { "type": "number" },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "translation": {
+              "type": "array",
+              "items": { "type": "number" },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "scale": {
+              "type": "array",
+              "items": { "type": "number" },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "rotation_point": {
+              "type": "string",
+              "enum": ["center", "corner"]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "patternRequired": [
+        "gui",
+        "ground",
+        "fixed",
+        "thirdperson_righthand",
+        "firstperson_righthand",
+        "head"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

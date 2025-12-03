@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Worldgen Feature JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric worldgen features",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type": {
+      "enum": [
+        "minecraft:tree",
+        "minecraft:random_patch",
+        "minecraft:random_selector",
+        "minecraft:simple_block",
+        "minecraft:vegetation_patch",
+        "minecraft:ore",
+        "minecraft:geode",
+        "minecraft:large_dripstone",
+        "minecraft:ice_spike",
+        "minecraft:scattered_ore"
+      ]
+    },
+    "config": {
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/$defs/tree_config" },
+        { "$ref": "#/$defs/random_patch_config" },
+        { "$ref": "#/$defs/ore_config" },
+        { "$ref": "#/$defs/geode_config" }
+      ]
+    }
+  },
+  "$defs": {
+    "tree_config": {
+      "type": "object",
+      "properties": {
+        "trunk_provider": { "$ref": "#/$defs/block_state_provider" },
+        "foliage_provider": { "$ref": "#/$defs/block_state_provider" },
+        "foliage_placer": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": [
+                "minecraft:fancy_foliage_placer",
+                "minecraft:blob_foliage_placer"
+              ]
+            },
+            "radius": { "type": "integer" },
+            "offset": { "type": "integer" }
+          }
+        },
+        "trunk_placer": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "enum": [
+                "minecraft:straight_trunk_placer",
+                "minecraft:fancy_trunk_placer"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "random_patch_config": {
+      "type": "object",
+      "properties": {
+        "tries": { "type": "integer", "minimum": 1 },
+        "xz_spread": { "type": "integer" },
+        "y_spread": { "type": "integer" },
+        "block_provider": { "$ref": "#/$defs/block_state_provider" }
+      }
+    },
+    "ore_config": {
+      "type": "object",
+      "properties": {
+        "size": { "type": "integer", "minimum": 1 },
+        "discard_chance_on_air_exposure": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "target": { "$ref": "#/$defs/block_state_provider" },
+        "state": { "$ref": "#/$defs/block_state" }
+      }
+    },
+    "block_state_provider": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "minecraft:simple_state_provider",
+            "minecraft:weighted_state_provider"
+          ]
+        }
+      }
+    },
+    "block_state": {
+      "type": "object",
+      "properties": {
+        "Name": { "type": "string", "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$" },
+        "Properties": { "type": "object" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

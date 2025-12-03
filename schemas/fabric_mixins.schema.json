@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Fabric Mixin JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric mixins",
+  "type": "object",
+  "required": [
+    "required",
+    "minVersion",
+    "package",
+    "compatibilityLevel",
+    "refmap",
+    "mixins"
+  ],
+  "properties": {
+    "required": { "const": true },
+    "minVersion": { "type": "string" },
+    "package": { "type": "string" },
+    "compatibilityLevel": {
+      "enum": ["JAVA_17", "JAVA_21"]
+    },
+    "refmap": { "type": "string" },
+    "mixins": {
+      "type": ["array", "string"],
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_/.-]+\\.json$"
+      }
+    },
+    "client": {
+      "type": ["array", "string"],
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_/.-]+\\.json$"
+      }
+    },
+    "server": {
+      "type": ["array", "string"],
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_/.-]+\\.json$"
+      }
+    },
+    "injectors": {
+      "type": "object",
+      "properties": {
+        "defaultRequire": { "type": "integer" }
+      }
+    },
+    "plugin": { "type": "string" }
+  },
+  "additionalProperties": false
+}

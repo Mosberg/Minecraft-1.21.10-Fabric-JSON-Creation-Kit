@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Entity Model (JsonEM)",
+  "description": "Robust validation schema for Minecraft 1.21.10 entity models with extensible geometry",
+  "type": "object",
+  "required": ["texture", "geometry"],
+  "properties": {
+    "texture": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "single" },
+        "resource": {
+          "type": "string",
+          "pattern": "^(minecraft|[a-z0-9_.-]+):entity/[a-z0-9_./-]+$"
+        }
+      },
+      "required": ["type", "resource"],
+      "additionalProperties": false
+    },
+    "geometry": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "$ref": "#/$defs/geometry_definition"
+        }
+      },
+      "minProperties": 1,
+      "additionalProperties": false
+    },
+    "animations": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "object",
+          "properties": {
+            "loop": { "type": "boolean" },
+            "animation_length": { "type": "number", "minimum": 0 },
+            "bones": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z0-9_]+$": {
+                  "type": "object",
+                  "properties": {
+                    "rotation": { "$ref": "#/$defs/animation_keyframe" },
+                    "position": { "$ref": "#/$defs/animation_keyframe" },
+                    "scale": { "$ref": "#/$defs/animation_keyframe" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "render_controllers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "geometry": { "type": "string" },
+          "textures": { "type": ["string", "array", "object"] },
+          "part_visibility": { "type": "object" },
+          "materials": { "type": "object" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "vector3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "uv_pair": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0 },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "geometry_definition": {
+      "type": "object",
+      "properties": {
+        "texturewidth": { "type": "integer", "minimum": 1 },
+        "textureheight": { "type": "integer", "minimum": 1 },
+        "bones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bone"
+          }
+        },
+        "locators": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9_]+$": { "$ref": "#/$defs/vector3" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "bone": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "parent": { "type": "string" },
+        "pivot": { "$ref": "#/$defs/vector3" },
+        "cubes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cube"
+          }
+        },
+        "poly_mesh": {
+          "type": "object",
+          "properties": {
+            "positions": { "$ref": "#/$defs/vector3_array" },
+            "normals": { "$ref": "#/$defs/vector3_array" },
+            "uvs": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/uv_pair" }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "cube": {
+      "type": "object",
+      "properties": {
+        "origin": { "$ref": "#/$defs/vector3" },
+        "size": { "$ref": "#/$defs/vector3" },
+        "uv": { "$ref": "#/$defs/uv_pair" },
+        "mirror": { "type": "boolean" },
+        "inflate": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "vector3_array": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/vector3" }
+    },
+    "animation_keyframe": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "0": { "$ref": "#/$defs/vector3" },
+          "90": { "$ref": "#/$defs/vector3" },
+          "100": { "$ref": "#/$defs/vector3" },
+          "pre": { "type": "boolean" },
+          "post": { "type": "boolean" }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

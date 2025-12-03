@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Minecraft 1.21.10 Fabric Mod JSON",
+  "description": "Robust validation schema for Minecraft 1.21.10 Fabric mod.json",
+  "type": "object",
+  "required": ["schemaVersion", "id", "version"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,63}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)?(?:\\+[a-zA-Z0-9]+)?)?$"
+    },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "authors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "homepage": { "type": "string", "format": "uri" },
+        "sources": { "type": "string", "format": "uri" },
+        "issues": { "type": "string", "format": "uri" }
+      }
+    },
+    "license": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9_.-]+/)?(?:icon|logo)\\.(?:png|jpg|jpeg|gif|webp)$"
+    },
+    "environment": {
+      "enum": ["*", "client", "server"]
+    },
+    "entrypoints": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_]+$": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "adapter": { "type": "string" },
+              "value": {
+                "oneOf": [
+                  { "type": "string" },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": { "type": "string" },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "enum": [
+                                "fabric:version",
+                                "fabric:loader",
+                                "minecraft",
+                                "environment"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "mixins": {
+      "type": ["string", "array"],
+      "items": {
+        "type": "string",
+        "pattern": ".*\\.json$"
+      }
+    },
+    "depends": {
+      "$ref": "#/$defs/fabric_dependencies"
+    },
+    "suggests": {
+      "$ref": "#/$defs/fabric_dependencies"
+    },
+    "custom": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "accessWidener": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+\\.aw$"
+    }
+  },
+  "$defs": {
+    "fabric_dependencies": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z][a-z0-9_]{1,63}$": {
+          "type": ["string", "object"],
+          "pattern": "^(?:[\\^~]?)(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)?(?:\\+[a-zA-Z0-9]+)?)?$"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
